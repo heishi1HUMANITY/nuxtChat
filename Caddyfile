@@ -1,0 +1,17 @@
+{
+  experimental_http3
+}
+localhost {
+  encode gzip
+  reverse_proxy /* http://web:3000
+  header {
+    Strict-Transport-Security max-age=31536000
+  }
+}
+ws.localhost {
+  encode gzip
+  reverse_proxy /* http://socket:8080
+  header {
+    Strict-Transport-Security max-age=31536000
+  }
+}

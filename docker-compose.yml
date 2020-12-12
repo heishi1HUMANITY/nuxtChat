@@ -1,0 +1,36 @@
+version: "3"
+services: 
+  server:
+    image: caddy
+    restart: unless-stopped
+    ports: 
+      - 80:80
+      - 443:443
+    volumes: 
+      - ./Caddyfile:/etc/caddy/Caddyfile
+
+  socket:      
+    image: webdev
+    restart: always
+    tty: true
+    volumes: 
+      - ./socket:/workspace
+    command: node app.js
+    
+  web:
+    image: node
+    restart: always
+    tty: true
+    working_dir: /workspace
+    volumes: 
+      - ./easychat:/workspace
+    command: npm start
+
+  db:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: chatappdb
+    volumes:
+      - ./mongodb/db:/data/db
